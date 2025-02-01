@@ -12,15 +12,14 @@ pub async fn update_percentage(
         percentage,
     } = payload;
 
-    // wallet address validation
-    if !is_valid_address(&wallet_address) {
+    if !is_valid_address(&wallet_address) || !is_valid_address(&from_token) {
         return Err(StatusCode::BAD_REQUEST);
     }
     if percentage <= 0 || percentage > 100 {
         return Err(StatusCode::BAD_REQUEST);
     }
 
-    // percent updte
+    // percent update
     let result = sqlx::query!(
         r#"
         UPDATE swap_subscription_from_token
